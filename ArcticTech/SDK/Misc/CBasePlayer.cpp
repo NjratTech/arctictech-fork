@@ -135,9 +135,20 @@ int& CBasePlayer::m_nImpulse() {
 	return *(int*)(this + _m_nImpulse);
 }
 
-CUtlVector<matrix3x4_t> CBasePlayer::GetCachedBoneData() {
-	static auto cachedBoneData = *(DWORD*)(Utils::PatternScan("client.dll", "FF B7 ?? ?? ?? ?? 52", 0x2)) + 0x4;
-	return *(CUtlVector<matrix3x4_t>*)(this + cachedBoneData);
+CUtlVector<matrix3x4_t>& CBasePlayer::GetCachedBoneData() {
+	static int offset = 0x2914; 
+	static bool init = false;
+
+	if (!init) {
+		auto sig = Utils::PatternScan("client.dll", "8D 8F ? ? ? ? 56 8B 01 FF 50 34");
+
+		if (sig) {
+			offset = *(int*)((uintptr_t)sig + 2);
+		}
+		init = true;
+	}
+
+	return *(CUtlVector<matrix3x4_t>*)((uintptr_t)this + offset);
 }
 
 float CBasePlayer::ScaleDamage(int hitgroup, CCSWeaponData* weaponData, float& damage) {

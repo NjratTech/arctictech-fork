@@ -406,8 +406,15 @@ void CShotManager::OnNetUpdate() {
 					it->miss_reason = "spread";
 			}
 			else {
-				Vector target_hit_point = shot->client_impacts[0];
-				if (shot->client_impacts.size() > 1) {
+				Vector target_hit_point;
+
+				if (!shot->client_impacts.empty()) {
+					target_hit_point = shot->client_impacts.back();
+				}
+				else {
+					target_hit_point = shot->shoot_pos /*+ (shot->s * 8192.f)*/; // xd
+				}
+				if (!shot->client_impacts.empty()) {
 					for (int i = 1; i < shot->client_impacts.size(); i++) {
 						if ((shot->client_impacts[i] - shot->target_pos).LengthSqr() < (target_hit_point - shot->target_pos).LengthSqr())
 							target_hit_point = shot->target_pos;

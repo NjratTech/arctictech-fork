@@ -487,7 +487,7 @@ public:
     bool                IsAlive();
     Vector              GetBonePosition(int bone);
     Vector              GetHitboxCenter(int hitbox, matrix3x4_t* matrix = nullptr);
-    CUtlVector<matrix3x4_t> GetCachedBoneData();
+    CUtlVector<matrix3x4_t>& GetCachedBoneData();
     float               ScaleDamage(int hitgroup, CCSWeaponData* weaponData, float& damage);
 
     Vector              GetEyePosition();
